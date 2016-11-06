@@ -1,0 +1,31 @@
+DECLARE  
+i         NUMBER := 1; 
+cnt         NUMBER := 10; 
+inst instructor%ROWTYPE; 
+   inst_id instructor.id%type;
+   bonus          NUMBER(6,2);
+BEGIN
+-- use WHILE LOOP to process data
+select count(*) into cnt from instructor;
+WHILE i <= cnt LOOP
+
+select * into inst FROM instructor 
+WHERE rowid = 
+(SELECT rowid FROM instructor 
+WHERE rownum <= i
+MINUS SELECT rowid FROM instructor 
+WHERE rownum < i);
+
+    IF (inst.salary > 80000) THEN
+    bonus := 100;
+    ELSIF (inst.salary > 50000) THEN
+    bonus := 200;
+    ELSE 
+    bonus := 300;
+    END IF;
+  
+   DBMS_OUTPUT.PUT_LINE(i || ' ' || inst.name|| ' '  ||bonus);
+   i := i+1;
+   
+END LOOP;
+END;
